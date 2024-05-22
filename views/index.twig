@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>
+        {{title}}
+    </title>
+    <style>
+        html,body {
+        {#  background-image: url("https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aGVhcnRzfGVufDB8fDB8fHww");
+        #}background-color: rgba(166,0,0,0.3);}
+
+
+
+    </style>
+</head>
+<body>
+    {% include "nav.twig" %}
+    <div class="w3-container">
+    {% include "pages/" ~ page ~ ".twig" %}
+    {% include "footer/footer.twig" %}
+    </div>
+    
+{#include "nav.twig"#}
+{#include "pages/$page.latte"#}
+{#include "footer/footer.twig"#}
+</body>
+</html>
