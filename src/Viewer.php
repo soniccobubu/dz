@@ -19,8 +19,10 @@ class Viewer
         $twig = new Environment($loader, [
             'cache' => __DIR__.'/../views/cache',
         ]);
-
-        echo $twig->render('index.twig', $this->data);
+        $isUserLoggedIn = !empty($_SESSION['login']) && $_SESSION['login'] === 'Test';
+        $params = $this->data;
+        $params['isUserLoggedIn'] = $isUserLoggedIn;
+        echo $twig->render('index.twig', $params);
     }
     //private array $data = [];
     //public function __construct(array $data=[]){

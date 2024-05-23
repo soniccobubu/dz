@@ -14,7 +14,7 @@ class Database
 
     public function __construct()
     {
-        $this->connection = new PDO('sqlite:' . __DIR__ . '/../../database.db');
+        $this->connection = new PDO('sqlite:' . __DIR__ . '/database.db');
         $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $this->initializeDatabase();
     }
@@ -46,10 +46,11 @@ class Database
     public static function executeQuery($sql, array $params = []): ?PDOStatement
     {
         $stmt = self::getInstance()->getConnection()->prepare($sql);
+
         $stmt->execute($params);
         return $stmt;
     }
-
+    
     public function __wakeup()
     {
     }

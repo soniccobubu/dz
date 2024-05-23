@@ -1,25 +1,39 @@
 <?php
-    require __DIR__ . '/../vendor/autoload.php';
 
+require __DIR__ . '/../vendor/autoload.php';
+
+$db = new \Iplague\Project\Database();
 
 $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
-
     $homeController = new Iplague\Project\Controllers\HomeController();
     $aboutController = new Iplague\Project\Controllers\AboutController();
     $contactsController = new Iplague\Project\Controllers\ContactsController();
     $footer = new Iplague\Project\Controllers\Footer();
     $catalogueController = new Iplague\Project\Controllers\CatalogueController();
+    $loginController = new Iplague\Project\Controllers\LoginController();
+    $authMiddleware = new \Iplague\Project\AuthMiddleware();
 
     $r->addRoute('GET', '/', [$homeController, 'index']);
     $r->addRoute('GET', '/home', [$homeController, 'index']);
     $r->addRoute('GET', '/about', [$aboutController, 'index']);
-    $r->addRoute('GET', '/contacts', [$contactsController, 'index']);
     $r->addRoute('GET', '/footer', [$footer, 'index']);
     $r->addRoute('GET', '/catalogue', [$catalogueController, 'index']);
-    $r->addRoute('POST', '/',[$homeController, 'handleForm']);
+    $r->addRoute('POST', '/', [$homeController, 'handleForm']);
     $r->addRoute('GET', '/home/delete', [$homeController, 'handleFormDelete']);
+    $r->addRoute('GET', '/login', [$loginController, 'index']);
+    $r->addRoute('POST', '/login', [$loginController, 'auth']);
+    $r->addRoute('GET', '/logout', function ($vars) {
+        session_destroy();
+        header('Location: /login');
+        exit;
+    });
+    $r->addRoute('GET', '/contacts', function ($vars) use ($authMiddleware, $contactsController) {
+        return $authMiddleware->handle([$contactsController, 'index'], $vars);
+    });
+    // Remove duplicate POST route
+    // $r->addRoute('POST', '/', [$homeController, 'handleForm']);
+    // $r->addRoute('GET', '/home/delete', [$homeController, 'handleFormDelete']);
 });
-
 
 // Fetch method and URI from somewhere
 $httpMethod = $_SERVER['REQUEST_METHOD'];
@@ -49,4 +63,3 @@ switch ($routeInfo[0]) {
         call_user_func($handler, $vars);
         break;
 }
-
