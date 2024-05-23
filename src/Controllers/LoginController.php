@@ -26,7 +26,7 @@ class LoginController
         $view->render();
     }
 
-    public function auth(): void
+    #[NoReturn]public function auth(): void
     {
         if(!isset($_POST['login'])) {
             header('Location: /login');
